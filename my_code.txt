@@ -1,0 +1,315 @@
+# Create a new React project using Vite
+npm create vite@latest servicehub-frontend -- --template react
+
+# Navigate to project directory
+cd servicehub-frontend
+
+# Install necessary dependencies
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
+npm install redux react-redux redux-thunk axios react-router-dom jwt-decode
+
+
+
+
+servicehub-frontend/
+├── public/
+├── src/
+│   ├── assets/
+│   │   └── images/
+│   ├── components/
+│   │   ├── common/
+│   │   ├── auth/
+│   │   │   ├── Register.jsx
+│   │   │   └── Login.jsx
+│   │   └── home/
+│   │       └── HomePage.jsx
+│   ├── redux/
+│   │   ├── actions/
+│   │   │   ├── authActions.js
+│   │   │   └── types.js
+│   │   ├── reducers/
+│   │   │   ├── authReducer.js
+│   │   │   └── index.js
+│   │   └── store.js
+│   ├── services/
+│   │   └── api.js
+│   ├── styles/
+│   │   ├── auth.css
+│   │   └── home.css
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── routes.jsx
+
+
+
+
+// src/components/auth/Register.jsx
+import React, { useState } from 'react';
+import { 
+  Container, 
+  Paper, 
+  Typography, 
+  TextField, 
+  Button, 
+  Grid, 
+  Divider, 
+  FormControl, 
+  FormControlLabel, 
+  Radio, 
+  RadioGroup,
+  Stepper,
+  Step,
+  StepLabel
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+import '../../styles/auth.css';
+
+const Register = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [userType, setUserType] = useState('client');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+    address: '',
+    userType: 'client',
+  });
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUserTypeChange = (e) => {
+    setUserType(e.target.value);
+    setFormData({ ...formData, userType: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // API call to register user would go here
+    console.log('Registration form submitted:', formData);
+  };
+
+  const steps = ['Account Type', 'Basic Information', 'Contact Details', 'Verification'];
+
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <FormControl component="fieldset" className="form-control">
+            <Typography variant="subtitle1" gutterBottom>Select Account Type</Typography>
+            <RadioGroup aria-label="userType" name="userType" value={userType} onChange={handleUserTypeChange}>
+              <FormControlLabel value="client" control={<Radio />} label="Client - I'm looking for services" />
+              <FormControlLabel value="provider" control={<Radio />} label="Service Provider - I offer professional services" />
+            </RadioGroup>
+          </FormControl>
+        );
+      case 1:
+        return (
+          <>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="firstName"
+                  label="First Name"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="lastName"
+                  label="Last Name"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="email"
+                  label="Email Address"
+                  variant="outlined"
+                  fullWidth
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="password"
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  variant="outlined"
+                  fullWidth
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+            </Grid>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="phoneNumber"
+                  label="Phone Number"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="address"
+                  label="Address"
+                  variant="outlined"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+              </Grid>
+            </Grid>
+          </>
+        );
+      case 3:
+        return (
+          <>
+            {userType === 'provider' ? (
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Please upload your professional credentials and verification documents:</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    color="primary"
+                    fullWidth
+                  >
+                    Upload Documents
+                    <input
+                      type="file"
+                      hidden
+                      multiple
+                    />
+                  </Button>
+                </Grid>
+              </Grid>
+            ) : (
+              <Typography variant="subtitle1">Please verify your email to complete registration.</Typography>
+            )}
+          </>
+        );
+      default:
+        return 'Unknown step';
+    }
+  };
+
+  return (
+    <Container maxWidth="md" className="register-container">
+      <Paper elevation={3} className="register-paper">
+        <Typography variant="h4" align="center" gutterBottom>
+          Join ServiceHub
+        </Typography>
+        <Typography variant="subtitle1" align="center" gutterBottom>
+          Connect with professional service providers or offer your services to clients
+        </Typography>
+        <Divider className="divider" />
+
+        <Stepper activeStep={activeStep} alternativeLabel className="stepper">
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+
+        <form onSubmit={handleSubmit} className="register-form">
+          {getStepContent(activeStep)}
+          
+          <div className="button-group">
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              className="back-button"
+            >
+              Back
+            </Button>
+            {activeStep === steps.length - 1 ? (
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                className="submit-button"
+              >
+                Register
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNext}
+                className="next-button"
+              >
+                Next
+              </Button>
+            )}
+          </div>
+        </form>
+        
+        <div className="login-link">
+          <Typography variant="body2">
+            Already have an account? <Link to="/login">Sign In</Link>
+          </Typography>
+        </div>
+      </Paper>
+    </Container>
+  );
+};
+
+export default Register;
+
+
+
+
+

@@ -1,0 +1,58 @@
+/* home.css */
+
+.homepage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hero-section {
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+}
+
+.category-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+}
+
+.provider-card {
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.provider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.provider-image {
+    height: 140px;
+    object-fit: cover;
+}
+
+.provider-rating {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+.rating-value {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.rating-stars {
+    color: #ffc107;
+}
+
+.provider-location {
+    display: flex;
+    align-items: center;
+    color: #757575;
+}

@@ -1,0 +1,14 @@
+/* NavBar.css */
+.MuiButton-root {
+    text-transform: none !important;
+    font-weight: normal !important;
+}
+
+.MuiAppBar-root {
+    border-bottom: 1px solid #eaeaea;
+}
+
+/* Optional: Add hover effects for menu items */
+.MuiButton-root:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
